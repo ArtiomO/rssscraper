@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 def get_app() -> FastAPI:  # noqa C901
     """Init fastapi app."""
     app = FastAPI(
-        title="SendCloudChallenge",
+        title="Rssscraper",
         docs_url="/swagger",
         openapi_url="/openapi.json",
         redoc_url=None,
