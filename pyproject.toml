@@ -13,7 +13,7 @@ uvicorn = {extras = ["standard"], version = "^0.21.1"}
 aiohttp = "^3.8.4"
 feedparser = "^6.0.10"
 pypika = "^0.48.9"
-structlog = "^22.3.0"
+structlog = "^23.1.0"
 
 
 [tool.poetry.group.dev.dependencies]
