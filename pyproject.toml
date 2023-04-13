@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "sendcloudchallenge"
+version = "0.1.0"
+description = ""
+authors = ["Artiom O. <artiom.ovchinnikov@ornament.health>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.0"
+asyncpg = "^0.27.0"
+uvicorn = {extras = ["standard"], version = "^0.21.1"}
+aiohttp = "^3.8.4"
+feedparser = "^6.0.10"
+pypika = "^0.48.9"
+structlog = "^22.3.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.2"
+pytest-mock = "^3.10.0"
+httpx = "^0.23.3"
+black = "^23.3.0"
+xenon = "^0.9.0"
+flake8 = "^6.0.0"
+isort = "^5.12.0"
+
+[tool.poetry.group.new_group]
+optional = true
+
+[tool.poetry.group.new_group.dependencies]
+tensorflow = "*"
+
+[tool.black]
+line-length = 100
+target_version = ['py310']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | venv
+    | env
+    | migrations
+  )/
+)
+'''
+
+[tool.isort]
+line_length = "100"
+# See https://github.com/timothycrosley/isort#multi-line-output-modes
+multi_line_output = "3"
+include_trailing_comma = "true"
+sections = "FUTURE,STDLIB,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+default_section = "FIRSTPARTY"
+skip = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | venv
+    | env
+    | ./app/
+  )/
+)
+'''
+known_first_party = "app"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+
