@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sendcloudchallenge"
+name = "rssscraper"
 version = "0.1.0"
 description = ""
 authors = ["Artiom O. <artiom.ovchinnikov@ornament.health>"]
