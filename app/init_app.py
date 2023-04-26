@@ -1,8 +1,9 @@
 from app.db.exceptions import NotFoundError
 from app.db.postgres import db
+from app.listeners.pg_channel_callback import new_feed_item_callback
 from app.models.exceptions import FieldError
 from app.repositories.exceptions import FeedAlreadyRegisteredByUser, ItemAlreadyMarkedAsRead
-from app.routers import router
+from app.routers import router, wsrouter
 from app.services.exceptions import FeedUpdateFailed
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -18,14 +19,18 @@ def get_app() -> FastAPI:  # noqa C901
     )
 
     app.include_router(router)
+    app.include_router(wsrouter)
 
     @app.on_event("startup")
     async def connect_to_db():
         await db.connect()
+        await db.add_listener("new_feed_item", new_feed_item_callback)
 
     @app.on_event("shutdown")
     async def close_db_connecions():
+        await db.remove_listener("new_feed_item", new_feed_item_callback)
         await db.disconnect()
+
 
     @app.exception_handler(FeedAlreadyRegisteredByUser)
     async def already_registered_handler(request: Request, exc: FeedAlreadyRegisteredByUser):

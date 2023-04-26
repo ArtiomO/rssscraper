@@ -8,11 +8,23 @@ dsn = f"postgres://{settings.db_user}:{settings.db_password}@{settings.db_host}:
 class Database:
     """Database class to handle connection pool, queries and shutdown."""
 
+    def __init__(self):
+        self.connection_pool = None
+        self.listener_connection = None
+
     async def connect(self):
         self.connection_pool = await asyncpg.create_pool(
             dsn=dsn,
             min_size=1,
         )
+
+    async def add_listener(self, channel, listener_callback):
+        self.listener_connection = await self.connection_pool.acquire()
+        await self.listener_connection.add_listener(channel, listener_callback)
+
+    async def remove_listener(self, channel, listener_callback):
+        await self.listener_connection.remove_listener(channel, listener_callback)
+        await self.connection_pool.release(self.listener_connection)
 
     async def disconnect(self):
         await self.connection_pool.close()

@@ -14,6 +14,7 @@ aiohttp = "^3.8.4"
 feedparser = "^6.0.10"
 pypika = "^0.48.9"
 structlog = "^23.1.0"
+websockets = "^11.0.2"
 
 
 [tool.poetry.group.dev.dependencies]

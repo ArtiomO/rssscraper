@@ -10,9 +10,16 @@ from app.services.exceptions import FeedUpdateFailed
 from app.services.update_feed import sync_feed_items
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer
+from fastapi import WebSocket, WebSocketDisconnect
+
+from app.websockets.connections import manager
 
 router = APIRouter(
     prefix="/api",
+)
+
+wsrouter = APIRouter(
+    prefix="/ws",
 )
 
 auth_scheme = HTTPBearer()
@@ -79,3 +86,13 @@ async def get_all_items(
 async def mark_read(item_id: int, user: HTTPBearer = Depends(auth_scheme)):
     """Get feed items."""
     return await feed_item_repo.feed_item_mark_read(int(user.credentials), item_id)
+
+@wsrouter.websocket("/{client_id}")
+async def websocket_endpoint(websocket: WebSocket, client_id: int):
+    await manager.connect(websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
