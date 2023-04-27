@@ -5,6 +5,8 @@ import feedparser
 from app.clients.http import http_client
 from app.models.feed import FeedItemInput
 from app.repositories.feed_item_repo import feed_item_repo
+from bs4 import BeautifulSoup
+import html
 
 
 def parse_feed(resp_body: str) -> feedparser.FeedParserDict:
@@ -16,7 +18,24 @@ def parse_feed(resp_body: str) -> feedparser.FeedParserDict:
 def deserialize_parsed(parsed: feedparser.FeedParserDict) -> tp.List[FeedItemInput]:
     """Create list of Feed item instances."""
 
-    return [FeedItemInput.parse_obj(dict(item)) for item in parsed.entries]
+    # dict_item = dict(item)
+    feed_items = []
+
+    for item in parsed.entries:
+
+        
+        parsed_item = FeedItemInput.parse_obj(dict(item))
+        soup_summary = BeautifulSoup(html.unescape(parsed_item.summary), 'html.parser')
+        soup_title = BeautifulSoup(html.unescape(parsed_item.title), 'html.parser')
+
+
+        parsed_item.summary = soup_summary.text
+        parsed_item.title = soup_title.text
+
+        feed_items.append(parsed_item)
+
+
+    return feed_items
 
 
 def get_newest_items(in_list: tp.List[FeedItemInput], date: datetime) -> tp.List[FeedItemInput]:
