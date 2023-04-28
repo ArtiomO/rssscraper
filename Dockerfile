@@ -31,7 +31,6 @@ ENV PIP_NO_CACHE_DIR=1 \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8
 
-
 WORKDIR /src
 
 COPY --from=builder /wheels /wheels

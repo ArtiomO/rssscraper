@@ -38,7 +38,7 @@ Build:
 
     Next launch feed updater service:
 
-        docker run --rm --init --entrypoint="" --name rss-scraper-updater --network=host --env-file=.env rss-scraper:0 /src/bin/update_feeds.sh
+        docker run --init --entrypoint="" --name rss-scraper-updater --network=host --env-file=.env rss-scraper:0 /src/bin/update_feeds.sh
         
     Now you ready to create user just send POST request to user uri:
         

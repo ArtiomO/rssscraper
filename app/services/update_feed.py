@@ -18,7 +18,6 @@ def parse_feed(resp_body: str) -> feedparser.FeedParserDict:
 def deserialize_parsed(parsed: feedparser.FeedParserDict) -> tp.List[FeedItemInput]:
     """Create list of Feed item instances."""
 
-    # dict_item = dict(item)
     feed_items = []
 
     for item in parsed.entries:
