@@ -2,7 +2,6 @@ import typing as tp
 
 from app.db.postgres import db
 from app.models.user import User, UserInput
-from app.repositories.base import AbstractUserRepository
 
 user_save_query = """
 INSERT INTO "user" (name)
@@ -15,7 +14,15 @@ SELECT * FROM "user";
 """
 
 
-class UserPostgreRepository(AbstractUserRepository):
+class UserRepository(tp.Protocol):
+    async def save(self, instance: UserInput) -> User:
+        ...
+
+    async def get_list(self) -> tp.List[User]:
+        ...
+
+
+class UserPostgreRepository:
     """User repository."""
 
     async def save(self, instance: UserInput) -> User:
@@ -25,6 +32,3 @@ class UserPostgreRepository(AbstractUserRepository):
     async def get_list(self) -> tp.List[User]:
         result = await db.fetch(user_query)
         return [User.parse_obj(dict(row)) for row in result]
-
-
-user_repo = UserPostgreRepository()

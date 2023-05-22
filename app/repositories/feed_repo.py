@@ -3,7 +3,6 @@ import typing as tp
 from app.db import exceptions
 from app.db.postgres import db
 from app.models.feed import Feed, FeedInput
-from app.repositories.base import AbstractFeedRepository
 from app.repositories.exceptions import FeedAlreadyRegisteredByUser
 
 feed_save_query = """
@@ -57,7 +56,27 @@ where rf.user_id = $1 and feed.id = $2;
 """
 
 
-class FeedPostgreRepository(AbstractFeedRepository):
+class FeedRepository(tp.Protocol):
+    async def save(self, instance: FeedInput, registered_by: str) -> Feed:
+        ...
+
+    async def get_list(self, user_id: int) -> tp.List[Feed]:
+        ...
+
+    async def update(self, feed_id: int, stalled: bool) -> Feed:
+        ...
+
+    async def get_list_active(self) -> tp.List[Feed]:
+        ...
+
+    async def get(self, feed_id: int) -> Feed:
+        ...
+
+    async def get_for_user(self, user_id: int, feed_id: int) -> Feed:
+        ...
+
+
+class FeedPostgreRepository:
     """Feed repository."""
 
     async def save(self, instance: FeedInput, registered_by: str) -> Feed:
@@ -91,6 +110,3 @@ class FeedPostgreRepository(AbstractFeedRepository):
     async def get_for_user(self, user_id: int, feed_id: int) -> Feed:
         result = await db.fetchrow(feed_query_by_user, (user_id, feed_id))
         return Feed.parse_obj(dict(result))
-
-
-feed_repo = FeedPostgreRepository()

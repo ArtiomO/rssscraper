@@ -31,7 +31,6 @@ def get_app() -> FastAPI:  # noqa C901
         await db.remove_listener("new_feed_item", new_feed_item_callback)
         await db.disconnect()
 
-
     @app.exception_handler(FeedAlreadyRegisteredByUser)
     async def already_registered_handler(request: Request, exc: FeedAlreadyRegisteredByUser):
         return JSONResponse(

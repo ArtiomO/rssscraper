@@ -3,18 +3,19 @@ import asyncio
 from app.clients.http import HttpClientConnectionError
 from app.config import settings
 from app.db.postgres import db
-from app.repositories.feed_repo import feed_repo
+from app.repositories.feed_item_repo import FeedItemPostgreRepository, FeedItemRepository
+from app.repositories.feed_repo import FeedRepository, FeedPostgreRepository
 from app.services.update_feed import sync_feed_items
 
 
-async def sync_feeds():
+async def sync_feeds(feed_item_repo: FeedItemRepository, feed_repo: FeedRepository):
     """Sync all feeds."""
 
     while True:
         feeds = await feed_repo.get_list_active()
         for feed in feeds:
             try:
-                await sync_feed_items(feed.uri, feed.id)
+                await sync_feed_items(feed_item_repo, feed.uri, feed.id)
             except HttpClientConnectionError:
                 await feed_repo.update(feed.id, stalled=True)
 
@@ -24,7 +25,9 @@ async def sync_feeds():
 async def execute_command():
     """Main command execution function."""
     await db.connect()
-    await sync_feeds()
+    feed_item_repo = FeedItemPostgreRepository()
+    feed_repo = FeedPostgreRepository()
+    await sync_feeds(feed_item_repo, feed_repo)
     await db.disconnect()
 
 

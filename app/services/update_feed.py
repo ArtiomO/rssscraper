@@ -4,9 +4,11 @@ from datetime import datetime
 import feedparser
 from app.clients.http import http_client
 from app.models.feed import FeedItemInput
-from app.repositories.feed_item_repo import feed_item_repo
+
 from bs4 import BeautifulSoup
 import html
+
+from app.repositories.feed_item_repo import FeedItemRepository
 
 
 def parse_feed(resp_body: str) -> feedparser.FeedParserDict:
@@ -21,18 +23,14 @@ def deserialize_parsed(parsed: feedparser.FeedParserDict) -> tp.List[FeedItemInp
     feed_items = []
 
     for item in parsed.entries:
-
-        
         parsed_item = FeedItemInput.parse_obj(dict(item))
-        soup_summary = BeautifulSoup(html.unescape(parsed_item.summary), 'html.parser')
-        soup_title = BeautifulSoup(html.unescape(parsed_item.title), 'html.parser')
-
+        soup_summary = BeautifulSoup(html.unescape(parsed_item.summary), "html.parser")
+        soup_title = BeautifulSoup(html.unescape(parsed_item.title), "html.parser")
 
         parsed_item.summary = soup_summary.text
         parsed_item.title = soup_title.text
 
         feed_items.append(parsed_item)
-
 
     return feed_items
 
@@ -43,7 +41,7 @@ def get_newest_items(in_list: tp.List[FeedItemInput], date: datetime) -> tp.List
     return list(filter(lambda item: (item.published > date), in_list))
 
 
-async def sync_feed_items(feed_uri: str, feed_id: int):
+async def sync_feed_items(feed_item_repo: FeedItemRepository, feed_uri: str, feed_id: int):
     """Sync feed items main function."""
 
     status, response = await http_client.request(method="get", url=feed_uri)

@@ -4,7 +4,6 @@ from datetime import datetime
 from app.db import exceptions
 from app.db.postgres import db
 from app.models.feed import FeedItem, FeedItemInput
-from app.repositories.base import AbstractFeedItemRepository
 from app.repositories.exceptions import ItemAlreadyMarkedAsRead
 from pypika import Order, Query, Tables
 
@@ -81,7 +80,41 @@ def feed_input_to_db(instances: tp.List[FeedItemInput], feed_id: int) -> tp.List
     return result
 
 
-class FeedItemPostgreRepository(AbstractFeedItemRepository):
+class FeedItemRepository(tp.Protocol):
+    """feed item repository."""
+
+    async def save_bulk(self, instances: tp.List[FeedItemInput], feed_id: int):
+        """Save items bulk."""
+        ...
+
+    async def get_latest_date_for_feed_items(self, feed_id: int) -> tp.Optional[datetime]:
+        """Get latest pub date for feed id."""
+        ...
+
+    async def get_feed_all_items(
+        self, user_id, feed_id: int, read: bool, order_by_date_asc: bool
+    ) -> tp.List[FeedItem]:
+        """Get feed read items."""
+
+        ...
+
+    async def get_all_items(
+        self, user_id: int, read: bool, order_by_date_asc: bool
+    ) -> tp.List[FeedItem]:
+        """Get all items."""
+
+        ...
+
+    async def get_feed_items_unread(self, feed_id: int, user_id: int) -> tp.List[FeedItem]:
+        """Get feed unread items."""
+        ...
+
+    async def feed_item_mark_read(self, user_id: int, item_id: int):
+        """Mark item as read."""
+        ...
+
+
+class FeedItemPostgreRepository:
     """feed item repository."""
 
     async def save_bulk(self, instances: tp.List[FeedItemInput], feed_id: int):
@@ -150,6 +183,3 @@ class FeedItemPostgreRepository(AbstractFeedItemRepository):
             await db.fetchrow(feed_item_mark_read, (user_id, item_id))
         except exceptions.AlreadyExistsError:
             raise ItemAlreadyMarkedAsRead
-
-
-feed_item_repo = FeedItemPostgreRepository()

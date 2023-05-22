@@ -7,8 +7,8 @@ from pydantic import BaseModel, validator
 
 DATE_FORMATS = ("%a, %d %b %Y %H:%M:%S %z", "%a, %d %b %Y %H:%M:%S %Z")
 URI_PATTERNS = (
-    "^https:\/\/[0-9A-z.]+.[0-9A-z.]+.[A-z]+$",  # noqa: W605
-    "^http:\/\/[0-9A-z.]+.[0-9A-z.]+.[A-z]+$",  # noqa: W605
+    r"^https:\/\/[0-9A-z.]+.[0-9A-z.]+.[A-z]+$",  # noqa: W605
+    r"^http:\/\/[0-9A-z.]+.[0-9A-z.]+.[A-z]+$",  # noqa: W605
 )
 
 
