@@ -44,7 +44,7 @@ def get_newest_items(in_list: tp.List[FeedItemInput], date: datetime) -> tp.List
 async def sync_feed_items(feed_item_repo: FeedItemRepository, feed_uri: str, feed_id: int):
     """Sync feed items main function."""
 
-    status, response = await http_client.request(method="get", url=feed_uri)
+    _, response = await http_client.request(method="get", url=feed_uri)
     parsed_feed = parse_feed(response)
     items = deserialize_parsed(parsed_feed)
     latest_item_date = await feed_item_repo.get_latest_date_for_feed_items(feed_id)
