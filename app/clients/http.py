@@ -1,7 +1,8 @@
+import typing as tp
+
 import aiohttp
 from aiohttp.client_exceptions import ClientConnectorError
 from app.clients.decorators import retry
-import typing as tp
 
 
 class HttpClientConnectionError(Exception):

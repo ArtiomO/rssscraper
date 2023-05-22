@@ -1,6 +1,5 @@
 from app.log import logger_factory
 from app.websockets.connections import manager
-import json
 
 logger = logger_factory.bind()
 

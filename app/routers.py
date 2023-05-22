@@ -4,16 +4,14 @@ from typing import Annotated
 from app.clients.http import HttpClientConnectionError
 from app.models.feed import Feed, FeedInput, FeedItem
 from app.models.user import User, UserInput
-from app.repositories.feed_item_repo import FeedItemRepository, FeedItemPostgreRepository
-from app.repositories.feed_repo import FeedRepository, FeedPostgreRepository
+from app.repositories.feed_item_repo import FeedItemPostgreRepository, FeedItemRepository
+from app.repositories.feed_repo import FeedPostgreRepository, FeedRepository
 from app.repositories.user_repo import UserPostgreRepository, UserRepository
 from app.services.exceptions import FeedUpdateFailed
 from app.services.update_feed import sync_feed_items
-from fastapi import APIRouter, Depends
-from fastapi.security import HTTPBearer
-from fastapi import WebSocket, WebSocketDisconnect
-
 from app.websockets.connections import manager
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi.security import HTTPBearer
 
 router = APIRouter(
     prefix="/api",

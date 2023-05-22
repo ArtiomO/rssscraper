@@ -4,7 +4,7 @@ from app.clients.http import HttpClientConnectionError
 from app.config import settings
 from app.db.postgres import db
 from app.repositories.feed_item_repo import FeedItemPostgreRepository, FeedItemRepository
-from app.repositories.feed_repo import FeedRepository, FeedPostgreRepository
+from app.repositories.feed_repo import FeedPostgreRepository, FeedRepository
 from app.services.update_feed import sync_feed_items
 
 
