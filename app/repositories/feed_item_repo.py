@@ -85,11 +85,10 @@ class FeedItemRepository(tp.Protocol):
 
     async def save_bulk(self, instances: tp.List[FeedItemInput], feed_id: int):
         """Save items bulk."""
-        ...
+
 
     async def get_latest_date_for_feed_items(self, feed_id: int) -> tp.Optional[datetime]:
         """Get latest pub date for feed id."""
-        ...
 
     async def get_feed_all_items(
         self, user_id, feed_id: int, read: bool, order_by_date_asc: bool

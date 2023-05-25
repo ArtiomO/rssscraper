@@ -37,4 +37,3 @@ if __name__ == "__main__":
         loop.run_until_complete(execute_command())
     except (KeyboardInterrupt, SystemExit):
         loop.run_until_complete(db.disconnect())
-        pass

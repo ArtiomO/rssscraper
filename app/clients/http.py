@@ -19,8 +19,8 @@ class HttpClient:
                 async with session.request(method=method, url=url) as resp:
                     resp_body = await resp.text()
                     return resp.status, resp_body
-        except ClientConnectorError:
-            raise HttpClientConnectionError
+        except ClientConnectorError as exc:
+            raise HttpClientConnectionError from exc
 
 
 http_client = HttpClient()

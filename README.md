@@ -12,7 +12,14 @@
     FEEDS_SYNC_INTERVAL=20
     LOG_LEVEL=INFO
     PYTHONUNBUFFERED=1
-    
+
+```mermaid
+  graph TD;
+      A-->B;
+      A-->C;
+      B-->D;
+      C-->D;
+```    
 
 # Docker
 

@@ -1,3 +1,5 @@
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from app.db.exceptions import NotFoundError
 from app.db.postgres import db
 from app.listeners.pg_channel_callback import new_feed_item_callback
@@ -5,8 +7,6 @@ from app.models.exceptions import FieldError
 from app.repositories.exceptions import FeedAlreadyRegisteredByUser, ItemAlreadyMarkedAsRead
 from app.routers import router, wsrouter
 from app.services.exceptions import FeedUpdateFailed
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
 
 
 def get_app() -> FastAPI:  # noqa C901
@@ -32,35 +32,35 @@ def get_app() -> FastAPI:  # noqa C901
         await db.disconnect()
 
     @app.exception_handler(FeedAlreadyRegisteredByUser)
-    async def already_registered_handler(request: Request, exc: FeedAlreadyRegisteredByUser):
+    async def already_registered_handler(exc: FeedAlreadyRegisteredByUser):
         return JSONResponse(
             status_code=400,
             content={"message": exc.message},
         )
 
     @app.exception_handler(ItemAlreadyMarkedAsRead)
-    async def already_marked_as_read_handler(request: Request, exc: ItemAlreadyMarkedAsRead):
+    async def already_marked_as_read_handler(exc: ItemAlreadyMarkedAsRead):
         return JSONResponse(
             status_code=400,
             content={"message": exc.message},
         )
 
     @app.exception_handler(FeedUpdateFailed)
-    async def feed_update_failed_handler(request: Request, exc: FeedUpdateFailed):
+    async def feed_update_failed_handler(exc: FeedUpdateFailed):
         return JSONResponse(
             status_code=400,
             content={"message": exc.message},
         )
 
     @app.exception_handler(NotFoundError)
-    async def not_found_handler(request: Request, exc: NotFoundError):
+    async def not_found_handler():
         return JSONResponse(
             status_code=404,
             content={"message": "Not found"},
         )
 
     @app.exception_handler(FieldError)
-    async def field_error_handler(request: Request, exc: FieldError):
+    async def field_error_handler(exc: FieldError):
         return JSONResponse(
             status_code=400,
             content={"message": f" Invalid value for field: {exc.field}.  {exc.value}"},

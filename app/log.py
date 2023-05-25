@@ -1,4 +1,3 @@
-# Todo leave log json example in comments here
 import logging.config
 import sys
 
