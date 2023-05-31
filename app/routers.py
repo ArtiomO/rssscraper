@@ -1,5 +1,7 @@
 import typing as tp
 from typing import Annotated
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
+from fastapi.security import HTTPBearer
 
 from app.clients.http import HttpClientConnectionError
 from app.models.feed import Feed, FeedInput, FeedItem
@@ -10,8 +12,6 @@ from app.repositories.user_repo import UserPostgreRepository, UserRepository
 from app.services.exceptions import FeedUpdateFailed
 from app.services.update_feed import sync_feed_items
 from app.websockets.connections import manager
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
-from fastapi.security import HTTPBearer
 
 router = APIRouter(
     prefix="/api",

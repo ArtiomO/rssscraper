@@ -87,8 +87,8 @@ class FeedPostgreRepository:
         feed = Feed.parse_obj(dict(feed))
         try:
             await db.fetchval(registration_save_query, (int(registered_by), feed.id))
-        except exceptions.AlreadyExistsError:
-            raise FeedAlreadyRegisteredByUser
+        except exceptions.AlreadyExistsError as exc:
+            raise FeedAlreadyRegisteredByUser from exc
         return feed
 
     async def get_list(self, user_id: int) -> tp.List[Feed]:
