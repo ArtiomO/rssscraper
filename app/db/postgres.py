@@ -1,6 +1,7 @@
 import asyncpg
 from app.config import settings
 from app.db.exceptions import AlreadyExistsError, NotFoundError
+import typing as tp
 
 dsn = f"postgres://{settings.db_user}:{settings.db_password}@{settings.db_host}:{settings.db_port}/{settings.db_name}"
 
@@ -9,8 +10,8 @@ class Database:
     """Database class to handle connection pool, queries and shutdown."""
 
     def __init__(self):
-        self.connection_pool = None
-        self.listener_connection = None
+        self.connection_pool: tp.Optional[asyncpg.Pool] = None
+        self.listener_connection: tp.Optional[asyncpg.Connection] = None
 
     async def connect(self):
         self.connection_pool = await asyncpg.create_pool(
@@ -61,8 +62,8 @@ class Database:
             async with connection.transaction():
                 try:
                     result = await connection.executemany(query, args)
-                except asyncpg.exceptions.UniqueViolationError as e:
-                    raise AlreadyExistsError(detail=e.detail, table_name=e.table_name)
+                except asyncpg.exceptions.UniqueViolationError as exc:
+                    raise AlreadyExistsError(detail=exc.detail, table_name=exc.table_name) from exc
         return result
 
     async def execute(self, query: str):

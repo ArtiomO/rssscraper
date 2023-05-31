@@ -1,12 +1,11 @@
 import html
 import typing as tp
 from datetime import datetime
-
 import feedparser
+from bs4 import BeautifulSoup
 from app.clients.http import http_client
 from app.models.feed import FeedItemInput
 from app.repositories.feed_item_repo import FeedItemRepository
-from bs4 import BeautifulSoup
 
 
 def parse_feed(resp_body: str) -> feedparser.FeedParserDict:

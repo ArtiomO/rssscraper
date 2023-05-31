@@ -20,7 +20,7 @@ def retry(  # noqa C901
 
     def _retry(func: tp.Callable) -> tp.Callable:  # type: ignore
         @wraps(func)
-        async def _inner(*args, **kwargs) -> FUNC_RESULT:
+        async def _inner(*args, **kwargs: dict) -> FUNC_RESULT:
             exception: Exception = Exception()
             wait = wait_time_seconds
             for attempt in range(attempts):

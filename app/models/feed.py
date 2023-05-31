@@ -1,9 +1,9 @@
 import re
 import typing as tp
 from datetime import datetime, timezone
-
-from app.models.exceptions import FieldError
 from pydantic import BaseModel, validator
+from app.models.exceptions import FieldError
+
 
 DATE_FORMATS = ("%a, %d %b %Y %H:%M:%S %z", "%a, %d %b %Y %H:%M:%S %Z")
 URI_PATTERNS = (
@@ -30,13 +30,13 @@ class FeedInput(BaseModel):
     uri: str
 
     @validator("uri", pre=True)
-    def parse_uri(cls, v):
-        if isinstance(v, str):
+    def parse_uri(cls, value):
+        if isinstance(value, str):
             for pattern in URI_PATTERNS:
-                result = re.match(pattern, v)
+                result = re.match(pattern, value)
                 if result:
-                    return v
-        raise FieldError(field="uri", value=v)
+                    return value
+        raise FieldError(field="uri", value=value)
 
 
 class Feed(BaseModel):
@@ -52,10 +52,10 @@ class FeedItemInput(BaseModel):
     published: datetime
 
     @validator("published", pre=True)
-    def parse_published(cls, v):
-        if isinstance(v, str):
-            v = validate_date_formats(v, date_formats=DATE_FORMATS)
-        return v
+    def parse_published(cls, value):
+        if isinstance(value, str):
+            value = validate_date_formats(value, date_formats=DATE_FORMATS)
+        return value
 
 
 class FeedItem(BaseModel):
