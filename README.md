@@ -1,6 +1,7 @@
 # Rss scraper
 
-    Rss scraper service
+    Rss scraper service.
+    Service created as portfolio project.
 
 # Environment variables
 
@@ -12,6 +13,8 @@
     FEEDS_SYNC_INTERVAL=20
     LOG_LEVEL=INFO
     PYTHONUNBUFFERED=1
+
+# Mermaid scheme markdown testing:
 
 ```mermaid
   graph TD;
