@@ -1,7 +1,8 @@
 # Rss scraper
 
     Rss scraper service.
-    Service created as portfolio project.
+    Service created as portfolio project so there is no 100% test coverage.
+    I am mainly trying to show raw sql usage without orm.
 
 # Environment variables
 
