@@ -15,16 +15,6 @@
     LOG_LEVEL=INFO
     PYTHONUNBUFFERED=1
 
-# Mermaid scheme markdown testing:
-
-```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
-```    
-
 # Docker
 
 Server listening on port 5000 inside container.
@@ -32,8 +22,6 @@ Server listening on port 5000 inside container.
 Build:
 
     docker build -t rss-scraper:0 .
-
-
     
 # HOW TO
 
